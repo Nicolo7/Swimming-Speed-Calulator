@@ -68,6 +68,7 @@ class Swimmer():
         print('\n')
         userList.append(self.name)
         speedList.append(self.speed)
+        weightList.append(self.weight)
         self.save()
         time.sleep(1)
         
@@ -79,6 +80,8 @@ class Swimmer():
                 line += str(speedList[x])   # line = name,speed,weight\n
                 line += ','
                 line += weightList[x]
+                if not line.endswith('\n'): # When new user is created, a
+                    line += '\n'            # newline doesnt get added.
                 filestream.write(line)
                 
     def switchUsers(self):
@@ -105,6 +108,9 @@ class Swimmer():
     def changeWeight(self):
         newWeight = input('Please enter your new weight!\n')
         self.weight = newWeight
+        for x in range(len(userList)):
+            if userList[x] == self.name:
+                weightList[x] = self.weight
         print('Change Successful!')
         self.showUserInfo()
     
@@ -137,7 +143,8 @@ class Swimmer():
         
         hx.tare()
         
-        print("Tare done! Add weight now...")
+        print("Calibration complete!\n\n***BEGIN SWIMMING IN 5 SECONDS***\n\n")
+        time.sleep(5)
         
         lastupdate = int(datetime.datetime.now().strftime("%S"))
         checkTime = lastupdate + 3
@@ -213,18 +220,17 @@ if __name__ == '__main__':
     MMchoice = 7
     
     # MAIN MENU
-    while (int(MMchoice) != 6):
+    while (int(MMchoice) != 5):
         print('What would you like to do today?')
         print('0 :: Switch Users')
         print('1 :: Create a new user')
-        print('2 :: Calibrate the machine')
-        print('3 :: Do a speed test!')
-        line4 = '4 :: Show '
+        print('2 :: Do a speed test!')
+        line4 = '3 :: Show '
         line4 += currentSwimmer.showName()
         line4 += '\'s stats'
         print(line4)
-        print('5 :: Change weight')
-        print('6 :: Exit')
+        print('4 :: Change weight')
+        print('5 :: Exit')
         MMchoice = input('Type here: ')
         
         if(int(MMchoice) == 0):
@@ -237,22 +243,18 @@ if __name__ == '__main__':
             
         elif(int(MMchoice) == 2):
             print('OPTION 2 HAS BEEN CHOSEN')
-            print('TESTING INSERT CALIBRATION')
-            
-        elif(int(MMchoice) == 3):
-            print('OPTION 3 HAS BEEN CHOSEN')
             currentSwimmer.swimTest()
             
-        elif(int(MMchoice) == 4):
+        elif(int(MMchoice) == 3):
             print('Now showing stats!')
             time.sleep(1)
             currentSwimmer.showUserInfo()
             time.sleep(2)
             
-        elif(int(MMchoice) == 5):
+        elif(int(MMchoice) == 4):
             currentSwimmer.changeWeight()
             
-        elif(int(MMchoice) == 6):
+        elif(int(MMchoice) == 5):
             print('Thank you for using the system.\nHave a nice day!')
             
         else:
