@@ -1,0 +1,57 @@
+Tito Cecil's Project Notes.
+
+Important equations to consider:
+- Force = Mass * Acceleration
+- Acceleration = Velocity / Time
+- (Rewriting) Force = Mass * Velocity / Time
+- (Rewriting) Force * Time / Mass = Velocity
+
+Swimming Speed has been defined as (per multiple sources):
+- Speed = PropulsiveForce * TurnoverRate - Drag
+
+Where Propuslive Force is defined as the force created with
+the movements of the swimmer's arms and legs. So far I have
+not found anything on calculating Turnover Rate or Drag. 
+Therefore for the purposes of this project or until more
+notes are found, we will consider Swimming Speed as the 
+following:
+- Speed = PropulsiveForce
+
+----------------------PROPOSITION------------------------
+Now since Propulsive Force will be measured in Newtons, I
+propose that we use the equations above to calculate an
+associated velocity with Force. In order for the velocity
+to be accurate, time will play a factor. Perhaps we can
+measure and update the speed of the swimmer every 2-3 
+seconds so time can equal 3 in the equation. Then to measure
+force, an average should be taken from as many readings 
+from the strain gauge as possible. The average will give
+the system a good idea of how much force the swimmer is
+exerting. Mass will also be needed for to calculate velocity.
+
+----------------------PROBLEMS-------------------------
+- The problem with using this formula is velocity will be
+meausred in N*s/kg NOT m/s. Because distance is not a
+factor in the equation, we cannot convert to meters. This
+however will be the most scientifically accurate method.
+(FIXED: https://en.wikipedia.org/wiki/Newton-second)
+According to multiple sources the following equation may
+be used to convert velocity:
+- N * s = kg * m /s
+- (Rewritten) N * s / kg = m / s
+With this we can now accurately collect the velocity in
+meters per second.
+
+- Another problem exists in the method of measuring the
+propulsion force. Technically, the force used in the
+swimming speed is exerted from the arms and legs. While 
+using the belt and a strain gauge to measure the force isnt
+a bad idea, the problem is that you are incorporating 
+other variables that might affect the actual force being
+exerted from the arms and legs. In short, the force being
+measured from the belt strain gauge might not be the exact
+propulsion force. 
+
+-------------------OTHER EQUATIONS-----------------------
+- kg = llbs * 2.205
+- meter = yard * 1.094
