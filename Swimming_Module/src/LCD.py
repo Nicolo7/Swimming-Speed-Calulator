@@ -1,8 +1,8 @@
-***
+'''
   This file serves the purpose of displaying the speed and other information on a 16x2 LCD screen.
   I am using an OSEPP 16x2 LCD screen. I am following the guide found on this link (https://pimylifeup.com/raspberry-pi-lcd-16x2/).
   The following code is tweaked from the github repository found from the link provided above.
-***
+'''
 
 #!/usr/bin/python
 import time
