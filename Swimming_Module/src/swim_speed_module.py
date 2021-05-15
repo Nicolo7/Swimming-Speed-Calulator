@@ -8,12 +8,37 @@ Created on Thu Apr 29 18:29:22 2021
 import os
 import time
 import datetime
+import LCD
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 user_path = os.path.join(root_path, 'Users.txt')
 userList=[]
 speedList=[]
 weightList=[]
+
+EMULATE_HX711=False
+
+referenceUnit = 57
+
+if not EMULATE_HX711:
+    import RPi.GPIO as GPIO
+    from hx711 import HX711
+else:
+    print('ERROR, HX711.py NOT FOUND')
+    exit(1)
+
+def cleanAndExit():
+    print("Cleaning...")
+
+    if not EMULATE_HX711:
+        GPIO.cleanup()
+    print("ENDING SWIM SPEED TEST")
+    
+hx = HX711(5, 6)
+hx.set_reading_format("MSB", "MSB")
+hx.set_reference_unit(referenceUnit)
+
+lcd = LCD.swimLCD()
 
 class Swimmer():
     
@@ -115,32 +140,19 @@ class Swimmer():
         self.showUserInfo()
     
     def swimTest(self):
-        EMULATE_HX711=False
-
-        referenceUnit = 57
-        
-        if not EMULATE_HX711:
-            import RPi.GPIO as GPIO
-            from hx711 import HX711
-        else:
-            from emulated_hx711 import HX711
-        
-        def cleanAndExit():
-            print("Cleaning...")
-        
-            if not EMULATE_HX711:
-                GPIO.cleanup()
-                
-            print("ENDING SWIM SPEED TEST")
-        
-        hx = HX711(5, 6)
-        
-        hx.set_reading_format("MSB", "MSB")
-        
-        hx.set_reference_unit(referenceUnit)
+        print('Please wait to apply any force as we begin to calibrate in 5 seconds.')
+        time.sleep(1)
+        print('Calibrating in 4 seconds.')
+        time.sleep(1)
+        print('Calibrating in 3 seconds.')
+        time.sleep(1)
+        print('Calibrating in 2 seconds.')
+        time.sleep(1)
+        print('Calibrating in 1 seconds.')
+        time.sleep(1)
+        print('***CALIBRATING***')
         
         hx.reset()
-        
         hx.tare()
         
         print("Calibration complete!\n\n***BEGIN SWIMMING IN 5 SECONDS***\n\n")
@@ -174,12 +186,11 @@ class Swimmer():
         
                 hx.power_down()
                 hx.power_up()
-                time.sleep(0.1)
+                time.sleep(0.01)
                 
                 current = int(datetime.datetime.now().strftime("%S"))
     
                 if (checkTime == current):
-                    #print(datetime.datetime.now().strftime("%S"))
                     lastupdate = int(datetime.datetime.now().strftime("%S"))
                     checkTime = lastupdate + 3
                     if lastupdate == 57:
@@ -199,9 +210,17 @@ class Swimmer():
                     speed = (avgForce * 3)/mass
                     
                     print(speed)
+                    lcd.clearLcd()
+                    firstline = 'Speed: '
+                    firstline += speed
+                    firstline += ' m/s'
+                    secondline = 'User: '
+                    secondline += currentSwimmer.showName()
+                    lcd.lcdShowMessage(firstline, secondline)
         
             except (KeyboardInterrupt):
                 cleanAndExit()
+                lcd.clearLcd
                 break
 
 if __name__ == '__main__':
@@ -221,6 +240,12 @@ if __name__ == '__main__':
     
     # MAIN MENU
     while (int(MMchoice) != 5):
+        firstline = 'Hello '
+        firstline += currentSwimmer.showName()
+        secondline = 'Weight: '
+        secondline += currentSwimmer.weight
+        lcd.lcdShowMessage(firstline, secondline)
+        
         print('What would you like to do today?')
         print('0 :: Switch Users')
         print('1 :: Create a new user')
